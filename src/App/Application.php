@@ -34,6 +34,7 @@ class Application implements ApplicationInterface
 
         if (!array_key_exists($requestMethod, $this->_routes)) {
             echo $this->getNotFoundHandler();
+
             return;
         }
         $uri = $_SERVER['REQUEST_URI'];
@@ -43,6 +44,7 @@ class Application implements ApplicationInterface
             $preparedRoute = preg_quote($routeName, '/');
             if (preg_match("/^{$preparedRoute}$/i", $uri)) {
                 echo $handler();
+
                 return;
             }
         }
@@ -50,7 +52,8 @@ class Application implements ApplicationInterface
         echo $this->getNotFoundHandler();
     }
 
-    private function getNotFoundHandler() {
+    private function getNotFoundHandler()
+    {
         return 'Not found';
     }
 }

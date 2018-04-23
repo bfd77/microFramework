@@ -1,18 +1,16 @@
 <?php
 
-/**
- * @param string $uri
- * @return string
- */
-function server($uri) {
-    if ($uri === '/') {
-        return '<h1>Main page</h1>';
-    }
-    if (preg_match('/^\/test\/?$/', $uri)) {
-        return '<h1>TEST</h1>';
-    }
-    return 'Not found';
-}
+namespace App;
+spl_autoload_register(function ($className) {
+    $path = str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php';
+    $fileParts =  [__DIR__, 'src', $path];
+    $filePath = implode(DIRECTORY_SEPARATOR, $fileParts);
+    require_once $filePath;
+});
 
-$uri = $_SERVER['REQUEST_URI'];
-echo server($uri);
+$app = new Application();
+
+$app->get('/', function () {
+    require __DIR__ . '/view/main_page.html';
+});
+$app->run();

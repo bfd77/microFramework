@@ -4,7 +4,7 @@ namespace App;
 
 interface ApplicationInterface
 {
-    public function get($path, $func);
-    public function post($path, $func);
+    public function get(string $path, callable $func);
+    public function post(string $path, callable $func);
     public function run();
 }

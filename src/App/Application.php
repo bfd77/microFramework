@@ -14,7 +14,7 @@ class Application implements ApplicationInterface
      * @param string $route
      * @param callable $handler
      */
-    public function get($route, $handler)
+    public function get(string $route, callable $handler)
     {
         $this->_routes['GET'][] = [$route, $handler];
     }
@@ -23,7 +23,7 @@ class Application implements ApplicationInterface
      * @param string $route
      * @param callable $handler
      */
-    public function post($route, $handler)
+    public function post(string $route, callable $handler)
     {
         $this->_routes['POST'][] = [$route, $handler];
     }
@@ -57,7 +57,7 @@ class Application implements ApplicationInterface
      * @param array $params
      * @return string
      */
-    private function render(string $templateName, $params = []) {
+    private function render(string $templateName, array $params = []) {
         $templatePath = __DIR__ . '/../../views/' . $templateName . '.phtml';
         extract($params);
         ob_start();

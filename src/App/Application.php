@@ -33,7 +33,7 @@ class Application implements ApplicationInterface
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
         if (!array_key_exists($requestMethod, $this->_routes)) {
-            echo $this->render('not_found');
+            echo 'not found';
 
             return;
         }
@@ -49,19 +49,6 @@ class Application implements ApplicationInterface
             }
         }
 
-        echo $this->render('not_found');
-    }
-
-    /**
-     * @param string $templateName
-     * @param array $params
-     * @return string
-     */
-    private function render(string $templateName, array $params = []) {
-        $templatePath = __DIR__ . '/../../views/' . $templateName . '.phtml';
-        extract($params);
-        ob_start();
-        include $templatePath;
-        return ob_get_clean();
+        echo 'not found';
     }
 }

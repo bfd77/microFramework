@@ -16,7 +16,7 @@ class Application implements ApplicationInterface
      */
     public function get(string $route, callable $handler)
     {
-        $this->_routes['GET'][] = [$route, $handler];
+        $this->_addRoute('GET', $route, $handler);
     }
 
     /**
@@ -25,7 +25,7 @@ class Application implements ApplicationInterface
      */
     public function post(string $route, callable $handler)
     {
-        $this->_routes['POST'][] = [$route, $handler];
+        $this->_addRoute('POST', $route, $handler);
     }
 
     public function run()
@@ -50,5 +50,15 @@ class Application implements ApplicationInterface
         }
 
         echo 'not found';
+    }
+
+    /**
+     * @param string $method
+     * @param string $name
+     * @param callable $handler
+     */
+    private function _addRoute(string $method, string $name, callable $handler)
+    {
+        $this->_routes[$method][] = [$name, $handler];
     }
 }

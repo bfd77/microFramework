@@ -10,7 +10,7 @@ $renderer = new Renderer();
 $app->get('/', function () use ($renderer) {
     return $renderer->render('main_page');
 });
-$app->get('/dynamic/:id', function ($requsetData, $id) {
-   return $id;
+$app->get('/dynamic/:id', function ($requsetData, $routeMatches) {
+   return $routeMatches;
 });
 $app->run();

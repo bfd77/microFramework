@@ -31,6 +31,7 @@ class Application implements ApplicationInterface
     public function run()
     {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
+        $requestData   = $_GET;
 
         if (!array_key_exists($requestMethod, $this->_routes)) {
             echo 'not found';
@@ -41,9 +42,13 @@ class Application implements ApplicationInterface
         $routes = $this->_routes[$requestMethod];
         foreach ($routes as $route) {
             list($routeName, $handler) = $route;
-            $preparedRoute = preg_quote($routeName, '/');
-            if (preg_match("/^{$preparedRoute}$/i", $uri)) {
-                echo $handler();
+            $matches = [];
+            $preparedRoute = str_replace('/', '\/', $routeName);
+            if (preg_match("/^{$preparedRoute}$/i", $uri, $matches)) {
+                $matchesWithKeys = array_filter($matches, function ($match) {
+                    return !is_numeric($match);
+                }, ARRAY_FILTER_USE_KEY);
+                echo json_encode($handler($requestData, $matchesWithKeys));
 
                 return;
             }
@@ -54,11 +59,13 @@ class Application implements ApplicationInterface
 
     /**
      * @param string $method
-     * @param string $name
+     * @param string $route
      * @param callable $handler
      */
-    private function _addRoute(string $method, string $name, callable $handler)
+    private function _addRoute(string $method, string $route, callable $handler)
     {
-        $this->_routes[$method][] = [$name, $handler];
+        $dynamicRoute = preg_replace('/:[^\/]+/', '(?P<$0>[\w]+)', $route);
+        $dynamicRoute = str_replace(':', '', $dynamicRoute);
+        $this->_routes[$method][] = [$dynamicRoute, $handler];
     }
 }
